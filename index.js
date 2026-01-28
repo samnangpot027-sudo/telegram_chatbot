@@ -1,276 +1,119 @@
-// index.js
 const TelegramBot = require("node-telegram-bot-api");
 require("dotenv").config();
 const express = require("express");
 
-// -------------------------
-// Telegram bot setup
-// -------------------------
-const TOKEN = process.env.BOT_TOKEN; // Read bot token from .env
-const channelId = "@myhelpcenter01"; // Replace with your channel ID or username
-
-// Create the bot with polling
+const TOKEN = process.env.BOT_TOKEN;
 const bot = new TelegramBot(TOKEN, { polling: true });
 
 console.log("🚀 Bot is starting...");
 
 // -------------------------
-// Helper function for menu actions
+// Function to show question menu
 // -------------------------
-function handleOption(chatId, option) {
-  if (option === "one") {
-    bot.sendMessage(chatId, "សូមរង់ចាំពី 5-10នាទី ហើយរាយការណ៍ទៅ support ។");
-  } else if (option === "two") {
-    bot.sendMessage(chatId, "បញ្ហាក់ជាមួយហាងធ្វើថ្មី និង រាយការណ៍ទៅ support ។");
-  } else if (option === "three") {
-    bot.sendMessage(
-      chatId,
-      "សូមខល 3ឡើងទៅ។ បើនៅតែមិនទទួលសូមរាយការណ៍ទៅ support។",
-    );
-  } else if (option === "fourth") {
-    bot.sendMessage(
-      chatId,
-      "សូមទាក់ទងទៅអតិថិជន និងប្រើ Map ក្នុង App។ បើនៅតែមិនឃើញសូមទាក់ទងទៅ Support។",
-    );
-  } else if (option === "five") {
-    bot.sendMessage(
-      chatId,
-      "កុំដឹកទៅទីតាំងថ្មីដោយខ្លួនឯង។ សូមរាយការណ៍ទៅ support ជាមុនសិន។",
-    );
-  } else if (option === "six") {
-    bot.sendMessage(chatId, "សូមឈប់ដឹកសិន ហើយធ្វើតាមការណែនាំរបស់ Support។");
-  } else if (option === "seven") {
-    bot.sendMessage(chatId, "សូមថតរូបភស្តុតាង ហើយរាយការណ៍ទៅ support ភ្លាមៗ។");
-  } else if (option === "eight") {
-    bot.sendMessage(chatId, "សូមចូលទៅពិនិត្យគណនីក្នុង Driver App។");
-  } else if (option === "nine") {
-    bot.sendMessage(
-      chatId,
-      "សូមប្រមូលប្រាក់ពីអតិថិជន ហើយទូរទាត់ទៅក្រុមហ៊ុនបន្ទាប់ពីចប់ម៉ោងដឹក។",
-    );
-  } else if (option === "ten") {
-    bot.sendMessage(
-      chatId,
-      "បាន! តែត្រូវជូនដំណឹងទៅប្រធានក្រុម ឬ ប្រធានផ្នែកដឹកជញ្ជូនជាមុនសិន ដើម្បីសុំការអនុញ្ញាត។",
-    );
-  } else if (option === "eleven") {
-    bot.sendMessage(
-      chatId,
-      "សុវត្ថិភាពជាមុន! សូមទាក់ទងទៅប្រធានផ្នែកភ្លាមៗ និង ផ្ញើរទីតាំងគ្រោះថ្នាក់។",
-    );
-  } else if (option === "twelve") {
-    bot.sendMessage(
-      chatId,
-      "បិទអេបទទួលបុងសិន​ រាយការណ៍ទៅប្រធានផ្នែក និង ថតរូបជាភស្តុតាង។",
-    );
-  } else if (option === "thirteen") {
-    bot.sendMessage(
-      chatId,
-      "សូមរក្សាសុវត្ថិភាព និងរាយការណ៍ទៅ Support។ សូមកុំជជែក ឬ ឈ្លោះប្រកែកជាមួយអតិថិជន។",
-    );
-  } else if (option === "fourteen") {
-    bot.sendMessage(chatId, "សូមបើក GPS និង Internet ឡើងវិញ ហើយ Restart App។");
-  } else if (option === "fifteen") {
-    bot.sendMessage(
-      chatId,
-      "សូមពិនិត្យមើល Internet និង Status Online របស់អេប។",
-    );
-  } else if (option === "sexteen") {
-    bot.sendMessage(chatId, "សូមទាក់ទងទៅប្រធានផ្នែក។");
-  } else if (option === "seventeen") {
-    bot.sendMessage(
-      chatId,
-      "a. រាល់បញ្ហាដែលត្រូវទាក់ទងជាមួយហាង និង អតិថិជន ចាំបាច់ត្រូវរាយការណ៍ទៅ Support សុំជំនួយ។ " +
-        " b. រាល់បញ្ហាដែលទាក់ទងតែអ្នកដឹកតែមួយ ត្រូវរាយការណ៍មក Supervisor។",
-    );
-  } else {
-    // Show main menu
-    bot.sendMessage(chatId, "សូមជ្រើសរើសមួយក្នុងចំណោមជម្រើសខាងក្រោម:", {
-      reply_markup: {
-        inline_keyboard: [
-          [
-            {
-              text: "1. ហាងធ្វើម្ហូបយឺត តើត្រូវធ្វើដូចម្តេច?",
-              callback_data: "one",
-            },
-          ],
-          [
-            {
-              text: "2. ហាងធ្វើម្ហូបខុស​ តើត្រូវធ្វើដូចម្តេច?",
-              callback_data: "two",
-            },
-          ],
-          [
-            {
-              text: "3. អតិថិជនមិនទទួលទូរស័ព្ទ?",
-              callback_data: "three",
-            },
-          ],
-          [
-            {
-              text: "4. ខ្ញុំរកទីតាំងអតិថិជនមិនឃើញ?",
-              callback_data: "fourth",
-            },
-          ],
-          [
-            {
-              text: "5. អតិថិជនប្តូរទីតាំងដឹក?",
-              callback_data: "five",
-            },
-          ],
-          [
-            {
-              text: "6. Order ត្រូវបាន Cancel កំឡុងពេលដឹក?",
-              callback_data: "six",
-            },
-          ],
-          [
-            {
-              text: "7. អាហារខូច ឬ ធ្លាក់ តើត្រូវធ្វើដូចម្តេច?",
-              callback_data: "seven",
-            },
-          ],
-          [
-            {
-              text: "8. ខ្ញុំចង់ដឹកប្រាក់ចំណូលថ្ងៃនេះ?",
-              callback_data: "eight",
-            },
-          ],
-          [
-            {
-              text: "9. បុងមាន COD តើត្រូវធ្វើដូចម្តេច?",
-              callback_data: "nine",
-            },
-          ],
-          [
-            {
-              text: "10. តើខ្ញុំអាចច្បាប់ក្នុងម៉ោងកំពុងធ្វើការងារបានទេ?",
-              callback_data: "ten",
-            },
-          ],
-          [
-            {
-              text: "11. ខ្ញុំមានគ្រោះថ្នាក់ចរាចរណ៍?",
-              callback_data: "eleven",
-            },
-          ],
-          [
-            {
-              text: "12. ម៉ូតូខូច តែមិនទាន់មាន Order ក្នុងដៃ?",
-              callback_data: "twelve",
-            },
-          ],
-          [
-            {
-              text: "13. អតថិជនមានអាកប្បកិរិយាមិនល្អ?",
-              callback_data: "thirteen",
-            },
-          ],
-          [
-            {
-              text: "14. App ខ្ញុំមិនអាចអាប់ដេតបាន?",
-              callback_data: "fourteen",
-            },
-          ],
-          [
-            {
-              text: "15. ខ្ញុំមិនអាចចុចទទួលបុងបាន?",
-              callback_data: "fifteen",
-            },
-          ],
-          [
-            {
-              text: "16. ខ្ញុំភ្លេច Password ?",
-              callback_data: "sexteen",
-            },
-          ],
-          [
-            {
-              text: "17. តើពេលណាខ្ញុំត្រូវទាក់ទងទៅ Support ហើយពេលណាខ្ញុំត្រូវទាក់ទងទៅ Supervisor?",
-              callback_data: "seventeen",
-            },
-          ],
-        ],
-      },
-    });
-  }
-}
-
-// -------------------------
-// Post menu to channel (first time only)
-// -------------------------
-bot
-  .sendMessage(channelId, "👋 Welcome! Please choose an option below:", {
+function showMenu(chatId) {
+  bot.sendMessage(chatId, "សូមជ្រើសរើសសំណួរមួយខាងក្រោម 👇", {
     reply_markup: {
       inline_keyboard: [
         [
           {
-            text: "1. នៅពេលអ្នកដឹកជួបបញ្ហាតើត្រូវធ្វើដូចម្តេច?",
-            url: "https://t.me/myhelpcenter01_bot?start=help",
+            text: "1. ហាងធ្វើម្ហូបយឺត តើត្រូវធ្វើដូចម្តេច?",
+            callback_data: "one",
           },
         ],
         [
           {
-            text: "2. ធ្វើដូចម្តេចទើបដឹកបានច្រើន?",
-            url: "https://t.me/myhelpcenter01_bot?start=answers",
+            text: "2. ហាងធ្វើម្ហូបខុស តើត្រូវធ្វើដូចម្តេច?",
+            callback_data: "two",
+          },
+        ],
+        [{ text: "3. អតិថិជនមិនទទួលទូរស័ព្ទ?", callback_data: "three" }],
+        [{ text: "4. ខ្ញុំរកទីតាំងអតិថិជនមិនឃើញ?", callback_data: "four" }],
+        [{ text: "5. អតិថិជនប្តូរទីតាំងដឹក?", callback_data: "five" }],
+        [
+          {
+            text: "6. Order ត្រូវបាន Cancel កំឡុងពេលដឹក?",
+            callback_data: "six",
+          },
+        ],
+        [
+          {
+            text: "7. អាហារខូច ឬ ធ្លាក់ តើត្រូវធ្វើដូចម្តេច?",
+            callback_data: "seven",
+          },
+        ],
+        [{ text: "8. ខ្ញុំចង់ដឹងប្រាក់ចំណូលថ្ងៃនេះ?", callback_data: "eight" }],
+        [{ text: "9. បុងមាន COD តើត្រូវធ្វើដូចម្តេច?", callback_data: "nine" }],
+        [{ text: "10. អាចឈប់ម៉ោងធ្វើការបានទេ?", callback_data: "ten" }],
+        [{ text: "11. មានគ្រោះថ្នាក់ចរាចរណ៍?", callback_data: "eleven" }],
+        [{ text: "12. ម៉ូតូខូច មិនទាន់មាន Order?", callback_data: "twelve" }],
+        [
+          {
+            text: "13. អតិថិជនមានអាកប្បកិរិយាមិនល្អ?",
+            callback_data: "thirteen",
+          },
+        ],
+        [{ text: "14. App មិនអាប់ដេតបាន?", callback_data: "fourteen" }],
+        [{ text: "15. មិនអាចចុចទទួលបុង?", callback_data: "fifteen" }],
+        [{ text: "16. ភ្លេច Password?", callback_data: "sixteen" }],
+        [
+          {
+            text: "17. ពេលណាទាក់ទង Support vs Supervisor?",
+            callback_data: "seventeen",
           },
         ],
       ],
     },
-  })
-  .then(() => console.log("✅ Menu posted to channel"))
-  .catch((err) => {
-    if (err.response && err.response.body && err.response.body.description) {
-      console.log(
-        "❌ Cannot post to channel yet:",
-        err.response.body.description,
-      );
-    } else {
-      console.log("❌ Cannot post to channel yet:", err.message || err);
-    }
   });
+}
 
 // -------------------------
-// Handle /start command with optional parameter
+// Answers
 // -------------------------
-bot.onText(/\/start(?:\s(.+))?/, (msg, match) => {
-  const chatId = msg.chat.id;
-  const param = match[1]; // may be undefined
-  console.log(
-    `📌 /start ${param || ""} received from: ${msg.chat.username || msg.chat.id}`,
-  );
-  handleOption(chatId, param);
+function handleOption(chatId, option) {
+  const answers = {
+    one: "សូមរង់ចាំពី 5-10 នាទី ហើយរាយការណ៍ទៅ support។",
+    two: "បញ្ជាក់ជាមួយហាងធ្វើថ្មី និង រាយការណ៍ទៅ support។",
+    three: "សូមខល 3 ដងឡើងទៅ។ បើមិនទទួល សូមរាយការណ៍ទៅ support។",
+    four: "សូមទាក់ទងអតិថិជន និងប្រើ Map ក្នុង App។ បើមិនឃើញ សូមទាក់ទង Support។",
+    five: "កុំដឹកទៅទីតាំងថ្មីដោយខ្លួនឯង។ រាយការណ៍ទៅ support ជាមុនសិន។",
+    six: "សូមឈប់ដឹកសិន ហើយធ្វើតាមការណែនាំរបស់ Support។",
+    seven: "សូមថតរូបភស្តុតាង ហើយរាយការណ៍ទៅ support ភ្លាមៗ។",
+    eight: "សូមចូលទៅពិនិត្យគណនីក្នុង Driver App។",
+    nine: "សូមប្រមូលប្រាក់ពីអតិថិជន ហើយទូរទាត់ទៅក្រុមហ៊ុនក្រោយម៉ោងដឹក។",
+    ten: "ត្រូវជូនដំណឹងទៅប្រធានក្រុមជាមុនសិន ដើម្បីសុំការអនុញ្ញាត។",
+    eleven: "សុវត្ថិភាពជាមុន! ទាក់ទងប្រធានភ្លាមៗ និងផ្ញើទីតាំងគ្រោះថ្នាក់។",
+    twelve: "បិទអេបសិន រាយការណ៍ទៅប្រធានផ្នែក និងថតរូបភស្តុតាង។",
+    thirteen: "រក្សាសុវត្ថិភាព និងរាយការណ៍ទៅ Support។ កុំឈ្លោះជាមួយអតិថិជន។",
+    fourteen: "បើក GPS និង Internet ឡើងវិញ ហើយ Restart App។",
+    fifteen: "ពិនិត្យ Internet និង Status Online របស់អេប។",
+    sixteen: "សូមទាក់ទងទៅប្រធានផ្នែក។",
+    seventeen:
+      "បញ្ហាដែលពាក់ព័ន្ធហាង/អតិថិជន → Support\nបញ្ហាផ្ទាល់អ្នកដឹក → Supervisor",
+  };
+
+  bot.sendMessage(chatId, answers[option] || "សូមជ្រើសរើសសំណួរពីម៉ឺនុយ។");
+}
+
+// -------------------------
+// Start command → show menu
+// -------------------------
+bot.onText(/\/start/, (msg) => {
+  showMenu(msg.chat.id);
 });
 
 // -------------------------
-// Handle inline button clicks
+// Button clicks
 // -------------------------
 bot.on("callback_query", (query) => {
-  const chatId = query.message.chat.id;
-  console.log(
-    `🔘 Button clicked: ${query.data} by ${query.from.username || query.from.id}`,
-  );
-  handleOption(chatId, query.data);
+  handleOption(query.message.chat.id, query.data);
   bot.answerCallbackQuery(query.id);
 });
 
 // -------------------------
-// Optional: log all messages (for debugging)
-// -------------------------
-bot.on("message", (msg) => {
-  console.log("📩 Received message:", msg.text);
-});
-
-// -------------------------
-// Dummy Express server (for Render free tier)
+// Dummy Express server for Render
 // -------------------------
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.get("/", (req, res) => {
-  res.send("✅ Telegram bot is running!");
-});
-
-app.listen(PORT, () => {
-  console.log(`🌐 Dummy server running on port ${PORT}`);
-});
+app.get("/", (req, res) => res.send("Bot is running ✅"));
+app.listen(PORT, () => console.log("🌐 Server running on port", PORT));
