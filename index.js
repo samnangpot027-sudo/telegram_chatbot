@@ -28,7 +28,7 @@ const answers = {
   fifteen: "ពិនិត្យ Internet និង Status Online របស់អេប។",
   sixteen: "សូមទាក់ទងទៅប្រធានផ្នែក។",
   seventeen:
-    "បញ្ហាដែលពាក់ព័ន្ធហាង/អតិថិជន → Support\nបញ្ហាផ្ទាល់អ្នកដឹក → Supervisor",
+    "ក). បញ្ហាដែលពាក់ព័ន្ធហាង/អតិថិជន → Support\n ខ). បញ្ហាផ្ទាល់អ្នកដឹក → Supervisor",
 };
 
 // -------------------------
