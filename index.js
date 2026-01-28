@@ -105,7 +105,22 @@ function showMenu(
 // Start Command
 // -------------------------
 bot.onText(/\/start/, (msg) => {
-  showMenu(msg.chat.id);
+  const chatId = msg.chat.id;
+
+  // Detect if user is in a channel
+  if (msg.chat.type === "channel") {
+    bot.sendMessage(
+      chatId,
+      "សូមទាក់ទង [Bot Private Chat](https://t.me/YOUR_BOT_USERNAME) ដើម្បីជ្រើសសំណួរ។",
+      {
+        parse_mode: "Markdown",
+        disable_web_page_preview: true,
+      },
+    );
+    return;
+  }
+
+  showMenu(chatId);
 });
 
 // -------------------------
@@ -125,8 +140,8 @@ bot.on("callback_query", (query) => {
 // -------------------------
 // Express Server (Render/Hosting)
 // -------------------------
-const app = express();
+const expressApp = express();
 const PORT = process.env.PORT || 3000;
 
-app.get("/", (req, res) => res.send("Bot is running ✅"));
-app.listen(PORT, () => console.log("🌐 Server running on port", PORT));
+expressApp.get("/", (req, res) => res.send("Bot is running ✅"));
+expressApp.listen(PORT, () => console.log("🌐 Server running on port", PORT));
